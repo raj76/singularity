@@ -1,0 +1,25 @@
+BootStrap: shub
+From: raj76/singularity:genome-annotation
+
+%labels
+Maintainer Raj Ayyampalayam
+Version v1.0
+
+%files
+BRAKER2.tar.gz /tmp
+gm_et_linux_64.tar.gz /tmp
+gm_key_64.gz /tmp
+
+%post
+export LC_ALL=C
+export DEBIAN_FRONTEND noninteractive
+export PATH=$PATH:/opt/conda/bin
+cd /opt
+tar zxf /tmp/gm_et_linux_64.tar.gz
+tar zxf /tmp/BRAKER2.tar.gz
+grep -l -R ^#! BRAKER_v2.0.5 gm_et_linux_64 | xargs sed -i.bak 's@^#!.*@#!/opt/conda/bin/perl@'
+
+%environment
+export LC_ALL=C
+export DEBIAN_FRONTEND noninteractive
+export PATH=/opt/conda/bin:/opt/BRAKER_v2.0.5:/opt/gm_et_linux_64/gmes_petap:$PATH
